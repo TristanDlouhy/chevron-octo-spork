@@ -1,18 +1,10 @@
-# Aufgabe „Tornetz“ (Gerüst)
+# Aufgabe „Tornetz“
 
-Steuerung eines Netzes von Toren, aufgebaut wie die Planung einer Bodenstation für
-Satellitenkommunikation. Keine echte Physik, alle Daten sind vorgegeben.
+Die Aufgabe, die jeder Agent bekommt, liegt vollständig in [`scaffold/`](scaffold/). Maßgeblich ist
+[`scaffold/SPEC.md`](scaffold/SPEC.md) (englisch, damit Sprache kein Störfaktor ist).
 
-Module (je eines pro Chevron-Modul):
+Die Spezifikation legt nur Verhalten, die HTTP-API und eine Einstiegsfunktion fest, nie die interne
+Struktur. Sonst würde der Benchmark die Spezifikation messen statt der Varianten.
 
-1. **gate-registry** – Tore mit Adressen registrieren, finden, stilllegen (Referenzmodul, fertig)
-2. **dialing** – Anwahl und Verbindungsplanung
-3. **energy-budget** – Energiebudget je Anwahl
-4. **shield** – Schutzschild der Gegenstelle
-5. **telemetry** – Telemetrie von der Gegenstelle
-
-Fehlerfälle: ungültige Adresse, zu wenig Energie, Tor bereits aktiv, Schild geschlossen, Verbindung
-abgebrochen.
-
-TODO: präzise Spezifikation mit Eingaben, Ausgaben, Zahlenwerten und Akzeptanztests, damit kein
-Agent Details aus bekannten Serien ergänzt.
+Änderungen an `scaffold/` nach dem Einfrieren (v1.0) brauchen einen Eintrag im Änderungsprotokoll
+des Berichts.

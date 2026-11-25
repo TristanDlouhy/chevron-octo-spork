@@ -3,33 +3,37 @@
 Frage: Erzeugen mehrere KI-Agents für dieselbe Aufgabe strukturell ähnlichere Lösungen, wenn sie
 Chevron nutzen?
 
-## Aufbau
+Protokoll, Metrik und Laufzahl stehen im Dokument „Chevron – Tornetz-Spezifikation &
+Benchmark-Protokoll“. Dieser Ordner enthält alles, was die Läufe brauchen.
 
-Fünf Agent-Läufe je Variante, dieselbe Aufgabe ([task/](task/)):
+## Varianten
 
 | Variante | Agent bekommt                                    |
 | -------- | ------------------------------------------------ |
 | A        | nur die Aufgabe                                  |
-| B        | Aufgabe + Referenzmodul `examples/gate-registry` |
+| B        | Aufgabe + Referenzmodul aus einer anderen Domäne |
 | C        | Aufgabe + Chevron (Skill, ESLint-Plugin, CLI)    |
+| D        | Aufgabe + Chevron-Skill ohne Prüfwerkzeug        |
 
-Zusätzlich eine Brownfield-Variante: bestehender, unstrukturierter Code, dem ein Feature hinzugefügt
-wird.
-
-## Metriken (Entwurf)
-
-- **Dateistruktur:** Ähnlichkeit der Verzeichnisbäume zwischen Läufen (z. B. Tree-Edit-Distance,
-  Jaccard über normalisierte Pfade).
-- **Abstraktionstiefe:** Anzahl Ebenen zwischen Aufrufer und Implementierung.
-- **Abhängigkeiten:** Ähnlichkeit der Import-Graphen auf Schichtebene.
-- **Korrektheit:** Anteil bestandener Akzeptanztests aus der Spezifikation.
-- **Kosten:** Tokenverbrauch und Anzahl Korrekturschleifen bis grün.
+Hauptstudie: mindestens 4 Agents × 6 Wiederholungen je Variante, endgültige Zahl nach dem Pilot.
+Der Pilot fährt nur Variante A mit 4 Agents × 5 Wiederholungen.
 
 ## Ordner
 
-- `task/` – Spezifikation der Aufgabe „Tornetz“ (noch zu schreiben, siehe `task/README.md`)
-- `variants/` – Prompts und Startzustände je Variante
-- `results/` – Rohdaten und Auswertungen der Läufe
+| Ordner                             | Inhalt                                                                                                                         |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| [`task/scaffold/`](task/scaffold/) | Gerüst, das jeder Agent bekommt: `SPEC.md` (englisch), Hardware-Simulator, Torregister, `package.json` (Node 26, TypeScript 7) |
+| [`variants/`](variants/)           | Prompt und Zusatzdateien je Variante                                                                                           |
+| [`reference/`](reference/)         | Referenzlösung, nur zur Prüfung der Tests. Wird nie an Agents gegeben                                                          |
+| [`acceptance/`](acceptance/)       | Versteckte Akzeptanztests (67 Stück, je eine Regel der Spezifikation)                                                          |
+| [`metric/`](metric/)               | Extraktor und Strukturdistanz D (Dateibaum, Abstraktionstiefe, Importgraph)                                                    |
+| [`harness/`](harness/)             | Container, Lauf-, Auswerte- und Planungsskripte                                                                                |
+| `results/`                         | Rohdaten und Auswertungen der Läufe                                                                                            |
+
+```sh
+pnpm --filter @chevron/benchmark test        # versteckte Tests gegen die Referenz + Metrik-Tests
+SOLUTION_DIR=<lauf>/work pnpm --filter @chevron/benchmark test:acceptance
+```
 
 Neutrale Begriffe in allen Veröffentlichungen: Tornetz, Tor, Schild, Gegenstelle. Keine geschützten
 Namen aus Film und Fernsehen.

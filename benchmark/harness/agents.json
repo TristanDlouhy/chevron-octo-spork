@@ -1,0 +1,6 @@
+{
+  "A1": { "tool": "claude", "model": "claude-sonnet-5-5", "label": "Claude Code, Sonnet" },
+  "A2": { "tool": "claude", "model": "claude-opus-5-5", "label": "Claude Code, Opus" },
+  "A3": { "tool": "gemini", "model": "SET_ME", "label": "Gemini CLI, Pro-Modell" },
+  "A4": { "tool": "gemini", "model": "SET_ME", "label": "Gemini CLI, Flash-Modell" }
+}

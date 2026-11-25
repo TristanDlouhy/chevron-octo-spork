@@ -1,0 +1,13 @@
+{
+  "name": "hardware-sim",
+  "version": "1.0.0",
+  "description": "Deterministic gate hardware simulator for the gate station task.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "license": "MIT"
+}
