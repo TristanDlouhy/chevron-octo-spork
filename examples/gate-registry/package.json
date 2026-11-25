@@ -1,0 +1,19 @@
+{
+  "name": "@chevron-examples/gate-registry",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Chevron reference module: the gate registry of the gate network benchmark task.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "neverthrow": "8.2.0"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "vitest": "4.1.12"
+  }
+}

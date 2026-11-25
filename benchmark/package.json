@@ -1,0 +1,12 @@
+{
+  "name": "@chevron/benchmark",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Benchmark: structural similarity of agent-written code with and without Chevron.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "typecheck": "echo \"benchmark: nothing to typecheck yet\"",
+    "test": "echo \"benchmark: no tests yet\""
+  }
+}

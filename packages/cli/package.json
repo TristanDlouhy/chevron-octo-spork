@@ -1,0 +1,25 @@
+{
+  "name": "chevron-cli",
+  "version": "0.0.0",
+  "description": "Command line checks for Chevron rules that need the whole project (layout, cycles, baseline).",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "chevron": "./dist/main.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "eslint-plugin-chevron": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "vitest": "4.1.12"
+  }
+}
