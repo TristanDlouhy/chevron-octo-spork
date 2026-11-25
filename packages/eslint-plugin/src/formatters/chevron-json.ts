@@ -23,19 +23,6 @@ export type ChevronFinding = {
   readonly source: string;
 };
 
-/**
- * Fix instructions for delegated rules, whose typescript-eslint messages carry no "Fix:" part.
- * Spike: belongs into rule-catalog.ts as a `fix` field once ADR 0002 is accepted.
- */
-const DELEGATED_FIX: Readonly<Record<string, string>> = {
-  CHV002: "Use 'unknown' and narrow with a type guard",
-  CHV003: "Narrow with a type guard that returns 'value is T'",
-  CHV004: 'Fix the type error; wrap untyped third-party code in an adapter',
-  CHV005: 'Declare parameter and return types explicitly',
-  CHV090:
-    'Remove the directive and fix the violation; exceptions belong in chevron.config with a reason',
-};
-
 const CHEVRON_MESSAGE = /^(CHV\d{3}) ([a-z0-9-]+): (.*?)\. Fix: (.*?)\.?$/;
 
 function findEntry(eslintRuleId: string | null): RuleCatalogEntry | undefined {
@@ -66,7 +53,7 @@ export function toChevronFindings(
         line: message.line,
         column: message.column,
         message: parsed?.[3] ?? message.message.replace(/\.$/, ''),
-        fix: parsed?.[4] ?? DELEGATED_FIX[entry?.id ?? ''] ?? '',
+        fix: parsed?.[4] ?? entry?.fix ?? '',
         docs: entry === undefined ? '' : ruleDocsUrl(entry),
         source: message.ruleId ?? 'eslint',
       };

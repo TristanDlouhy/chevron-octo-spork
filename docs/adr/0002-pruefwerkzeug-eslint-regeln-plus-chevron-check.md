@@ -175,8 +175,8 @@ Keines der drei prüft Abstraktionstiefe (CHV020/021) oder den Dateiaufbau volls
   ESLint (Inhalt)“, so wie im Regeltext; **CHV010** liegt komplett in der CLI. Beides ist im Code
   umgesetzt (die ESLint-Regel `chevron/chv010` aus dem Spike ist gelöscht). Falls RULES.md dazu
   präzisiert werden soll, macht das der Thread, der das Regelwerk pflegt.
-- `rule-catalog.ts` braucht ein Feld `fix` für delegierte Regeln; der Spike hält die Texte vorerst im
-  Formatter (`DELEGATED_FIX`).
+- `rule-catalog.ts` hat ein Feld `fix` für delegierte Regeln und CHV090, deren Meldungen keinen
+  „Fix“-Teil haben. Der JSON-Formatter ergänzt es daraus.
 - Für Agents gilt nur `chevron check --format json`. Das gehört in die Agent-Anleitung (Stufe 3).
 - `chevron check` kostet auf 3200 Dateien rund 14 s und 1,3 GB. Für Pre-Commit-Hooks braucht es
   später einen Modus „nur geänderte Dateien“ (ESLint pro Datei, CLI-Prüfungen nur für betroffene
