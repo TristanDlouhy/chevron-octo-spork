@@ -1,13 +1,11 @@
-import { moduleLayout } from './module-layout.js';
 import { noInheritance } from './no-inheritance.js';
 import { oneContractOneImpl } from './one-contract-one-impl.js';
 
 /**
- * Spike rules (ADR 0002). Not part of `recommended` yet; rule names are the lower-case Chevron
- * IDs so that `chevron/chv021` maps 1:1 to RULES.md.
+ * Custom Chevron rules. Rule names are the lower-case Chevron IDs, so `chevron/chv021` maps 1:1
+ * to RULES.md. Per ADR 0002 they only look at the linted file, never at the file system.
  */
-export const spikeRules = {
-  chv010: moduleLayout,
+export const chevronRules = {
   chv020: oneContractOneImpl,
   chv021: noInheritance,
 };

@@ -7,12 +7,6 @@ import { checkInlineConfig } from './inline-config.js';
 import type { ChevronFinding } from './finding.js';
 
 /**
- * Hybrid engine: per-file rules run through ESLint's Node API with a configuration that Chevron
- * owns. The project's own eslint.config.js is ignored (`overrideConfigFile: true`), inline
- * directives are switched off, and `--rule` style overrides do not exist. Project-wide checks
- * (CHV010, CHV091) and the directive scan (CHV090) stay in the CLI.
- */
-/**
  * typescript-eslint's `RuleModule` type does not match ESLint 10's `Plugin` type (ESLint 10 removed
  * deprecated context methods that typescript-eslint 8 still declares). At runtime the plugin is a
  * valid ESLint plugin; this guard bridges the types without a type assertion (CHV003).
@@ -21,7 +15,12 @@ function isEslintPlugin(value: unknown): value is ESLint.Plugin {
   return typeof value === 'object' && value !== null && 'rules' in value;
 }
 
-export async function runEslintEngine(
+/**
+ * Runs the per-file rules through ESLint's Node API with a configuration that Chevron owns
+ * (ADR 0002). The project's own eslint.config.js, nested configs and inline directives have no
+ * effect, and there are no `--rule` style overrides. The CHV090 scan still reports every directive.
+ */
+export async function runEslint(
   projectDir: string,
   patterns: readonly string[],
 ): Promise<ChevronFinding[]> {

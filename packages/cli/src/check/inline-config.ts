@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import { ts } from 'ts-morph';
+import ts from 'typescript';
 
 import { createFinding, type ChevronFinding } from './finding.js';
 

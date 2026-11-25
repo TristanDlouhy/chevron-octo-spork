@@ -1,6 +1,6 @@
 # ADR 0002: Prüfwerkzeug – ESLint-Regeln pro Datei, `chevron check` als einziges Gate
 
-- Status: vorgeschlagen
+- Status: angenommen
 - Datum: 2026-11-25
 - Betrifft Regeln: CHV002, CHV010, CHV020, CHV021, CHV090, CHV091 (Schnitt aller Regeln, RULES.md
   Offener Punkt 6)
@@ -25,15 +25,19 @@ TypeScript 6.0.3, ts-morph 28.0.
 
 ### Spike-Code
 
-| Ort                                       | Inhalt                                                                                           |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `packages/eslint-plugin/src/rules/`       | ESLint-Regeln `chevron/chv010`, `chv020`, `chv021` (registriert, nicht in `recommended`)         |
-| `packages/eslint-plugin/src/formatters/`  | Umsetzung von ESLint-Ergebnissen ins JSON-Format aus RULES.md                                    |
-| `packages/cli/src/spike/`                 | `chevron check --engine eslint\|ts-morph`, CHV010 als Dateisystem-Lauf, CHV090-Scanner, Baseline |
-| `packages/cli/test/fixtures/violations/`  | Tornetz-Fixture mit 23 gezielt platzierten Verstößen                                             |
-| `packages/cli/test/spike-engines.test.ts` | beide Engines: gleiche Treffer, 0 Treffer am Referenzmodul, Ratchet                              |
+Der vollständige Spike mit beiden Engines (`chevron check --engine eslint|ts-morph`) liegt im
+Commit `508cb2b` auf dem Branch `claude/project-thread-azy6kx`. Alle Zahlen unten stammen von dort.
+Nach der Entscheidung blieb nur Variante C im Repo:
 
-Reproduzieren: `pnpm run build && node packages/cli/dist/main.js check --engine eslint --project packages/cli/test/fixtures/violations --format json`.
+| Ort                                      | Inhalt                                                                                        |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `packages/eslint-plugin/src/rules/`      | ESLint-Regeln `chevron/chv020` (Inhalt) und `chv021`, registriert, nicht in `recommended`     |
+| `packages/eslint-plugin/src/formatters/` | Umsetzung von ESLint-Ergebnissen ins JSON-Format aus RULES.md                                 |
+| `packages/cli/src/check/`                | `chevron check`: ESLint mit gesperrter Config, CHV010, CHV020-Paare, CHV090-Scanner, Baseline |
+| `packages/cli/test/fixtures/violations/` | Tornetz-Fixture mit 23 gezielt platzierten Verstößen                                          |
+| `packages/cli/test/check.test.ts`        | alle Verstöße gefunden, 0 Treffer am Referenzmodul, Ratchet                                   |
+
+Reproduzieren: `pnpm run build && node packages/cli/dist/main.js check --project packages/cli/test/fixtures/violations --format json`.
 
 ## Ergebnisse
 
@@ -167,11 +171,10 @@ Keines der drei prüft Abstraktionstiefe (CHV020/021) oder den Dateiaufbau volls
 
 ## Konsequenzen
 
-- Die Spalte „Prüfung“ in RULES.md bleibt im Kern richtig. Abweichung: **CHV020** ist „CLI
-  (Dateipaare) + ESLint (Inhalt)“ – das steht so bereits im Regeltext, die ESLint-Spike-Regel macht
-  aber noch beides und muss die Paarprüfung abgeben. **CHV010** gehört komplett in die CLI; die
-  ESLint-Spike-Regel `chevron/chv010` wird gelöscht. Die RULES.md-Änderung macht der Thread, der
-  das Regelwerk pflegt.
+- Die Spalte „Prüfung“ in RULES.md bleibt im Kern richtig. **CHV020** ist „CLI (Dateipaare) +
+  ESLint (Inhalt)“, so wie im Regeltext; **CHV010** liegt komplett in der CLI. Beides ist im Code
+  umgesetzt (die ESLint-Regel `chevron/chv010` aus dem Spike ist gelöscht). Falls RULES.md dazu
+  präzisiert werden soll, macht das der Thread, der das Regelwerk pflegt.
 - `rule-catalog.ts` braucht ein Feld `fix` für delegierte Regeln; der Spike hält die Texte vorerst im
   Formatter (`DELEGATED_FIX`).
 - Für Agents gilt nur `chevron check --format json`. Das gehört in die Agent-Anleitung (Stufe 3).
@@ -180,7 +183,8 @@ Keines der drei prüft Abstraktionstiefe (CHV020/021) oder den Dateiaufbau volls
   Module).
 - Baseline-Schutz ist nicht gelöst, nur verlagert: CI muss `chevron-baseline.json` gegen den
   Zielbranch prüfen (darf nur schrumpfen). Das ist Teil des Grillings „Durchsetzung“.
-- ts-morph fliegt nach dem Spike wieder aus `packages/cli` raus, ebenso die `--engine`-Option.
+- ts-morph und die Option `--engine` sind nach dem Spike wieder entfernt. Die CLI nutzt `eslint`,
+  `typescript-eslint` und `typescript` als Peer-Dependencies.
 
 ## Verworfene Alternativen
 

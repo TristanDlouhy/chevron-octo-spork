@@ -1,7 +1,7 @@
 import type { TSESLint } from '@typescript-eslint/utils';
 
 import { createRecommendedConfig } from './configs/recommended.js';
-import { spikeRules } from './rules/index.js';
+import { chevronRules } from './rules/index.js';
 
 export {
   findRuleByDelegate,
@@ -30,8 +30,8 @@ const plugin = {
     name: 'eslint-plugin-chevron',
     version: '0.0.0',
   },
-  // Spike rules (ADR 0002): registered, but not yet enabled in `recommended`.
-  rules: spikeRules,
+  // Registered, not yet enabled in `recommended` (status 'planned' in rule-catalog.ts).
+  rules: chevronRules,
 } satisfies TSESLint.FlatConfig.Plugin;
 
 export const chevron = {

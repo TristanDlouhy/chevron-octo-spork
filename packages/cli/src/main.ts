@@ -3,8 +3,8 @@ import { parseArgs } from 'node:util';
 
 import { ruleCatalog } from 'eslint-plugin-chevron';
 
-import { baseline, check, isEngine } from './spike/check.js';
-import { formatText } from './spike/finding.js';
+import { baseline, check } from './check/check.js';
+import { formatText } from './check/finding.js';
 
 const USAGE = `Usage: chevron <command> [options]
 
@@ -15,7 +15,6 @@ Commands:
 
 Options:
   --format <text|json>   Output format (default: text)
-  --engine <eslint|ts-morph>  Spike (ADR 0002): engine for per-file rules (default: eslint)
   --project <dir>        Project directory (default: current directory)
   --prune                With 'baseline': lower counts to the current state, never raise
   -h, --help             Show this help
@@ -45,7 +44,6 @@ async function run(argv: readonly string[]): Promise<number> {
     options: {
       format: { type: 'string', default: 'text' },
       help: { type: 'boolean', short: 'h', default: false },
-      engine: { type: 'string', default: 'eslint' },
       project: { type: 'string', default: process.cwd() },
       prune: { type: 'boolean', default: false },
     },
@@ -62,16 +60,11 @@ async function run(argv: readonly string[]): Promise<number> {
       return listRules(values.format);
     case 'check':
     case 'baseline': {
-      const engine = values.engine;
-      if (!isEngine(engine)) {
-        process.stderr.write(`Unknown engine '${engine}'.\n`);
-        return EXIT_NOT_IMPLEMENTED;
-      }
       if (command === 'baseline') {
-        process.stdout.write(`${await baseline(values.project, engine, values.prune)}\n`);
+        process.stdout.write(`${await baseline(values.project, values.prune)}\n`);
         return EXIT_OK;
       }
-      const report = await check(values.project, engine);
+      const report = await check(values.project);
       if (values.format === 'json') {
         process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
       } else {
@@ -79,7 +72,7 @@ async function run(argv: readonly string[]): Promise<number> {
           process.stdout.write(`${formatText(finding)}\n`);
         }
         process.stdout.write(
-          `${String(report.findings.length)} finding(s), ${String(report.suppressed)} suppressed by baseline, ${String(report.durationMs)} ms (${report.engine}).\n`,
+          `${String(report.findings.length)} finding(s), ${String(report.suppressed)} suppressed by baseline, ${String(report.durationMs)} ms.\n`,
         );
       }
       return report.findings.length === 0 ? EXIT_OK : EXIT_VIOLATIONS;
