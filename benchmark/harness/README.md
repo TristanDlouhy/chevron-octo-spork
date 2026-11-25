@@ -43,6 +43,16 @@ Läufe landen in `~/chevron-runs/<variante>-<agent>-r<n>/` (anpassbar mit `CHEVR
 Ein bestehender Lauf wird nie überschrieben. Nur bei Infrastrukturfehlern darf ein Lauf gelöscht und
 neu gefahren werden; das wird im Lauflog des Berichts vermerkt.
 
+## Lieferkette
+
+- Repo (pnpm): `minimumReleaseAge` 7 Tage, keine Install-Skripte von Abhängigkeiten
+  (`strictDepBuilds`), Lockfile wird in der CI mit `--frozen-lockfile` geprüft.
+- Arbeitsordner der Agents (npm): `.npmrc` im Gerüst mit `ignore-scripts=true` und `before=<Datum>`.
+  npm löst damit nur Versionen auf, die vor dem Datum erschienen sind, auch für Pakete, die ein Agent
+  nachinstalliert. Beim Einfrieren (v1.0) wird das Datum auf mindestens 7 Tage vor dem ersten Lauf
+  gesetzt und danach nicht mehr geändert.
+- Agent-CLIs im Image sind auf Versionen gepinnt, die beim Pinnen mindestens 7 Tage alt waren.
+
 ## Im Probelauf zu prüfen
 
 - Gemini CLI: Greifen die Ausschlüsse der Web-Werkzeuge aus `gemini-settings.json`? Im Transkript

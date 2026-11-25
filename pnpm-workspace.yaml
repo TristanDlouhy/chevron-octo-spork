@@ -2,3 +2,10 @@ packages:
   - packages/*
   - examples/*
   - benchmark
+
+# Supply chain security
+# Resolve only package versions that are at least 7 days old (value in minutes).
+minimumReleaseAge: 10080
+# Never run install scripts of dependencies; allow single packages here when needed.
+onlyBuiltDependencies: []
+strictDepBuilds: true

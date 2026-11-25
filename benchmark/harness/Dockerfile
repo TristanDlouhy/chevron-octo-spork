@@ -5,7 +5,7 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends git ca-certificates jq \
   && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g @anthropic-ai/claude-code@2.1.332 @google/gemini-cli@0.71.1 \
+RUN npm install -g @anthropic-ai/claude-code@2.1.327 @google/gemini-cli@0.68.0 \
   && npm cache clean --force
 
 # Gemini CLI: no web tools. Lives in the user home, not in the workspace the agent sees.
