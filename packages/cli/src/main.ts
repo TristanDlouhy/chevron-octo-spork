@@ -3,19 +3,26 @@ import { parseArgs } from 'node:util';
 
 import { ruleCatalog } from 'eslint-plugin-chevron';
 
+import { baseline, check, isEngine } from './spike/check.js';
+import { formatText } from './spike/finding.js';
+
 const USAGE = `Usage: chevron <command> [options]
 
 Commands:
   check       Run project-wide Chevron checks (CHV001, CHV010, CHV014, CHV020, CHV032, CHV090, CHV091)
-  baseline    Record current violations in chevron-baseline.json (CHV091)
+  baseline    Record current violations in chevron-baseline.json (CHV091); --prune only shrinks it
   rules       List all Chevron rule ids
 
 Options:
   --format <text|json>   Output format (default: text)
+  --engine <eslint|ts-morph>  Spike (ADR 0002): engine for per-file rules (default: eslint)
+  --project <dir>        Project directory (default: current directory)
+  --prune                With 'baseline': lower counts to the current state, never raise
   -h, --help             Show this help
 `;
 
 const EXIT_OK = 0;
+const EXIT_VIOLATIONS = 1;
 const EXIT_NOT_IMPLEMENTED = 2;
 
 function listRules(format: string): number {
@@ -31,13 +38,16 @@ function listRules(format: string): number {
   return EXIT_OK;
 }
 
-function run(argv: readonly string[]): number {
+async function run(argv: readonly string[]): Promise<number> {
   const { values, positionals } = parseArgs({
     args: [...argv],
     allowPositionals: true,
     options: {
       format: { type: 'string', default: 'text' },
       help: { type: 'boolean', short: 'h', default: false },
+      engine: { type: 'string', default: 'eslint' },
+      project: { type: 'string', default: process.cwd() },
+      prune: { type: 'boolean', default: false },
     },
   });
 
@@ -51,15 +61,33 @@ function run(argv: readonly string[]): number {
     case 'rules':
       return listRules(values.format);
     case 'check':
-    case 'baseline':
-      process.stderr.write(
-        `chevron ${command}: not implemented yet (see RULES.md, column "Prüfung").\n`,
-      );
-      return EXIT_NOT_IMPLEMENTED;
+    case 'baseline': {
+      const engine = values.engine;
+      if (!isEngine(engine)) {
+        process.stderr.write(`Unknown engine '${engine}'.\n`);
+        return EXIT_NOT_IMPLEMENTED;
+      }
+      if (command === 'baseline') {
+        process.stdout.write(`${await baseline(values.project, engine, values.prune)}\n`);
+        return EXIT_OK;
+      }
+      const report = await check(values.project, engine);
+      if (values.format === 'json') {
+        process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
+      } else {
+        for (const finding of report.findings) {
+          process.stdout.write(`${formatText(finding)}\n`);
+        }
+        process.stdout.write(
+          `${String(report.findings.length)} finding(s), ${String(report.suppressed)} suppressed by baseline, ${String(report.durationMs)} ms (${report.engine}).\n`,
+        );
+      }
+      return report.findings.length === 0 ? EXIT_OK : EXIT_VIOLATIONS;
+    }
     default:
       process.stderr.write(`Unknown command '${command}'.\n\n${USAGE}`);
       return EXIT_NOT_IMPLEMENTED;
   }
 }
 
-process.exitCode = run(process.argv.slice(2));
+process.exitCode = await run(process.argv.slice(2));
