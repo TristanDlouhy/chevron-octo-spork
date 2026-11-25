@@ -19,7 +19,14 @@
     "eslint-plugin-chevron": "workspace:*"
   },
   "devDependencies": {
+    "eslint": "10.15.0",
     "typescript": "6.0.3",
+    "typescript-eslint": "8.74.0",
     "vitest": "4.1.12"
+  },
+  "peerDependencies": {
+    "eslint": "^10.0.0",
+    "typescript": ">=5.4.0 <6.1.0",
+    "typescript-eslint": "^8.0.0"
   }
 }

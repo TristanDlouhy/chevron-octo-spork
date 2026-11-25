@@ -15,6 +15,11 @@ export type RuleCatalogEntry = {
   readonly status: RuleStatus;
   /** typescript-eslint rules that implement this Chevron rule (without the '@typescript-eslint/' prefix). */
   readonly delegatesTo: readonly string[];
+  /**
+   * Fix instruction for findings whose message has no "Fix:" part: delegated typescript-eslint
+   * rules and ESLint's own directive warnings (CHV090). Taken from the rule's message in RULES.md.
+   */
+  readonly fix?: string;
 };
 
 export const RULES_DOCS_URL =
@@ -43,6 +48,7 @@ export const ruleCatalog = [
       'no-unsafe-member-access',
       'no-unsafe-return',
     ],
+    fix: "Use 'unknown' and narrow with a type guard",
   },
   {
     id: 'CHV003',
@@ -51,6 +57,7 @@ export const ruleCatalog = [
     checks: ['typescript-eslint'],
     status: 'active',
     delegatesTo: ['consistent-type-assertions', 'no-non-null-assertion'],
+    fix: "Narrow with a type guard that returns 'value is T'",
   },
   {
     id: 'CHV004',
@@ -59,6 +66,7 @@ export const ruleCatalog = [
     checks: ['typescript-eslint'],
     status: 'active',
     delegatesTo: ['ban-ts-comment'],
+    fix: 'Fix the type error; wrap untyped third-party code in an adapter',
   },
   {
     id: 'CHV005',
@@ -67,6 +75,7 @@ export const ruleCatalog = [
     checks: ['typescript-eslint'],
     status: 'active',
     delegatesTo: ['explicit-module-boundary-types', 'explicit-function-return-type'],
+    fix: 'Declare the return type explicitly',
   },
   {
     id: 'CHV010',
@@ -227,6 +236,7 @@ export const ruleCatalog = [
     checks: ['config', 'cli'],
     status: 'active',
     delegatesTo: [],
+    fix: 'Remove the directive and fix the violation; exceptions belong in chevron.config with a reason',
   },
   {
     id: 'CHV091',
