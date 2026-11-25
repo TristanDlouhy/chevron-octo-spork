@@ -16,6 +16,14 @@ describe('ruleCatalog', () => {
     }
   });
 
+  it('has a fix instruction for every rule whose findings come without one', () => {
+    for (const entry of ruleCatalog) {
+      if (entry.delegatesTo.length > 0 || entry.id === 'CHV090') {
+        expect(entry, entry.id).toHaveProperty('fix');
+      }
+    }
+  });
+
   it('maps delegated typescript-eslint rules to their Chevron id', () => {
     expect(findRuleByDelegate('@typescript-eslint/no-explicit-any')?.id).toBe('CHV002');
     expect(findRuleByDelegate('@typescript-eslint/ban-ts-comment')?.id).toBe('CHV004');

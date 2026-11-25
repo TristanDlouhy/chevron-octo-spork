@@ -1,6 +1,7 @@
-import type { ESLint } from 'eslint';
+import type { TSESLint } from '@typescript-eslint/utils';
 
 import { createRecommendedConfig } from './configs/recommended.js';
+import { chevronRules } from './rules/index.js';
 
 export {
   findRuleByDelegate,
@@ -12,6 +13,16 @@ export {
   type RuleCheck,
   type RuleStatus,
 } from './rule-catalog.js';
+export {
+  classifyContractFile,
+  isLayer,
+  LAYERS,
+  partnerFileName,
+  resolveModulePath,
+  type ContractFile,
+  type ModulePath,
+} from './rules/module-path.js';
+export { toChevronFindings, type ChevronFinding } from './formatters/chevron-json.js';
 export { createRecommendedConfig, type RecommendedConfigOptions } from './configs/recommended.js';
 
 const plugin = {
@@ -19,9 +30,9 @@ const plugin = {
     name: 'eslint-plugin-chevron',
     version: '0.0.0',
   },
-  // Custom Chevron rules (CHV011 ff.) are added here once implemented.
-  rules: {},
-} satisfies ESLint.Plugin;
+  // Registered, not yet enabled in `recommended` (status 'planned' in rule-catalog.ts).
+  rules: chevronRules,
+} satisfies TSESLint.FlatConfig.Plugin;
 
 export const chevron = {
   plugin,
