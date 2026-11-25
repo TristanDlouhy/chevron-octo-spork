@@ -26,7 +26,7 @@ TypeScript 6.0.3, ts-morph 28.0.
 ### Spike-Code
 
 Der vollständige Spike mit beiden Engines (`chevron check --engine eslint|ts-morph`) liegt im
-Commit `508cb2b` auf dem Branch `claude/project-thread-azy6kx`. Alle Zahlen unten stammen von dort.
+Commit `508cb2b` (PR #2, erster Commit). Alle Zahlen unten stammen von dort.
 Nach der Entscheidung blieb nur Variante C im Repo:
 
 | Ort                                      | Inhalt                                                                                        |
