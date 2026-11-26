@@ -10,8 +10,6 @@ Chevron-Regelwerk, keine `CLAUDE.md`, keine Agent-Einstellungen des Nutzerkontos
 - `pnpm install` im Repository-Wurzelordner (für Tests und Metrik).
 - `harness/.env` nach Vorlage `.env.example`: `ANTHROPIC_API_KEY` oder `CLAUDE_CODE_OAUTH_TOKEN`
   (Abo, erzeugt mit `claude setup-token`) und `GEMINI_API_KEY`.
-- In `harness/agents.json` die Gemini-Modell-IDs eintragen (`SET_ME`). `gemini --list-models` zeigt
-  die verfügbaren.
 
 ## Ablauf
 
