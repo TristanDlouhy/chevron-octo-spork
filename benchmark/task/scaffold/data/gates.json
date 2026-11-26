@@ -1,0 +1,10 @@
+[
+  { "address": "KX-4471-Q", "name": "Relay North", "distanceClass": 2, "state": "operational" },
+  { "address": "MB-9900-S", "name": "Outer Beacon", "distanceClass": 5, "state": "operational" },
+  { "address": "TA-1203-G", "name": "Harbor Ring", "distanceClass": 1, "state": "operational" },
+  { "address": "RV-5550-P", "name": "Basalt Array", "distanceClass": 3, "state": "operational" },
+  { "address": "LO-0007-H", "name": "Lone Spire", "distanceClass": 4, "state": "decommissioned" },
+  { "address": "QE-3318-P", "name": "Quarry Echo", "distanceClass": 3, "state": "operational" },
+  { "address": "ZN-8642-U", "name": "Zenith Post", "distanceClass": 4, "state": "operational" },
+  { "address": "DW-2025-J", "name": "Drift Watch", "distanceClass": 1, "state": "decommissioned" }
+]

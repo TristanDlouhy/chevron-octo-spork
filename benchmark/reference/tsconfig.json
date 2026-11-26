@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node"],
+    "paths": { "hardware-sim": ["../task/scaffold/vendor/hardware-sim/index.d.ts"] }
+  },
+  "include": ["src"]
+}
